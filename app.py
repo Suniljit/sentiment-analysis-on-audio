@@ -1,4 +1,4 @@
-import time
+from io import BytesIO
 
 import streamlit as st
 
@@ -31,10 +31,10 @@ def main():
         
         # Load and process audio input
         audio_file = input_audio_file.name
-        with open(audio_file, 'wb') as f:
-            f.write(input_audio_file.getbuffer())
+        audio_bytes = input_audio_file.read()
+        audio_buffer = BytesIO(audio_bytes)  # Create an in-memory buffer
         check_audio_format(audio_file)
-        audio, _ = load_audio(audio_file)
+        audio, _ = load_audio(audio_buffer)
 
         # Perform speech to text
         transcription = speech_to_text(audio)
@@ -68,10 +68,10 @@ def main():
         
         # Load and process audio input
         video_file = input_video_file.name
-        #with open(video_file, 'wb') as f:
-        #    f.write(input_video_file.getbuffer())
+        video_bytes = input_video_file.read()
+        video_buffer = BytesIO(video_bytes)  # Create an in-memory buffer
         check_video_format(video_file)
-        audio, _ = extract_audio_from_video(video_file)
+        audio, _ = extract_audio_from_video(video_buffer)
 
         # Perform speech to text
         transcription = speech_to_text(audio)
