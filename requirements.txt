@@ -1,0 +1,10 @@
+torch
+transformers
+librosa 
+sounddevice
+moviepy
+pydub
+streamlit 
+numpy
+pandas
+scipy
