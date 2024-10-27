@@ -26,80 +26,64 @@ def main():
         input_audio_file = st.file_uploader("Upload an audio file:", type=["wav", "mp3"])
         input_video_file = st.file_uploader("Upload a video file:", type=["mp4", "mov"])
 
-
+    # Process audio or video file if uploaded
     if input_audio_file is not None:
-        
-        # Load and process audio input
-        audio_file = input_audio_file.name
-        audio_bytes = input_audio_file.read()
-        audio_buffer = BytesIO(audio_bytes)  # Create an in-memory buffer
-        check_audio_format(audio_file)
-        audio, _ = load_audio(audio_buffer)
+        process_file(input_audio_file, is_audio=True)
+    elif input_video_file is not None:
+        process_file(input_video_file, is_audio=False)
 
-        # Perform speech to text
-        transcription = speech_to_text(audio)
 
-        # Display transcription
-        st.subheader("Transcription:")
-        typing_placeholder = st.empty() # placeholder for dynamic content
-        display_typing_effect(transcription, typing_placeholder)
-        
-        # Perform sentiment analysis on text
-        text_sentiment_scores = textual_sentiment_analysis(transcription)
+def process_file(file, is_audio=True):
+    # Set up buffer and check format
+    file_name = file.name
+    file_bytes = file.read()
+    file_buffer = BytesIO(file_bytes)
 
-        # Display sentiment scores
-        st.subheader("Sentiment Analysis on Text:")
-        display_sentiment_scores(text_sentiment_scores)
-        
-        # Perform sentiment analysis on tone
-        tone_sentiment_scores = tonal_sentiment_analysis(audio)
+    if is_audio:
+        check_audio_format(file_name)
+        audio, _ = load_audio(file_buffer)
+    else:
+        check_video_format(file_name)
+        audio, _ = extract_audio_from_video(file_buffer)
 
-        # Display sentiment scores
-        st.subheader("Sentiment Analysis on Tone:")
-        display_sentiment_scores(tone_sentiment_scores)
+    # Run speech to text
+    transcription = run_transcription(audio)
 
-        # Display Summary
-        text_sentiment, tone_sentiment = get_sentiment(text_sentiment_scores, tone_sentiment_scores)
-        st.subheader("Summary")
-        typing_placeholder = st.empty()
-        display_sentiment_summary(text_sentiment, tone_sentiment, typing_placeholder)
+    # Run sentiment analysis
+    text_sentiment_scores = analyze_text_sentiment(transcription)
+    tone_sentiment_scores = analyze_tone_sentiment(audio)
 
-    if input_video_file is not None:
-        
-        # Load and process audio input
-        video_file = input_video_file.name
-        video_bytes = input_video_file.read()
-        video_buffer = BytesIO(video_bytes)  # Create an in-memory buffer
-        check_video_format(video_file)
-        audio, _ = extract_audio_from_video(video_buffer)
+    # Display summary
+    display_summary(transcription, text_sentiment_scores, tone_sentiment_scores)
 
-        # Perform speech to text
-        transcription = speech_to_text(audio)
 
-        # Display transcription
-        st.subheader("Transcription:")
-        typing_placeholder = st.empty() # placeholder for dynamic content
-        display_typing_effect(transcription, typing_placeholder)
-        
-        # Perform sentiment analysis on text
-        text_sentiment_scores = textual_sentiment_analysis(transcription)
+def run_transcription(audio):
+    transcription = speech_to_text(audio)
+    st.subheader("Transcription:")
+    typing_placeholder = st.empty()  # placeholder for dynamic content
+    display_typing_effect(transcription, typing_placeholder)
+    return transcription
 
-        # Display sentiment scores
-        st.subheader("Sentiment Analysis on Text:")
-        display_sentiment_scores(text_sentiment_scores)
-        
-        # Perform sentiment analysis on tone
-        tone_sentiment_scores = tonal_sentiment_analysis(audio)
 
-        # Display sentiment scores
-        st.subheader("Sentiment Analysis on Tone:")
-        display_sentiment_scores(tone_sentiment_scores)
+def analyze_text_sentiment(transcription):
+    text_sentiment_scores = textual_sentiment_analysis(transcription)
+    st.subheader("Sentiment Analysis on Text:")
+    display_sentiment_scores(text_sentiment_scores)
+    return text_sentiment_scores
 
-        # Display Summary
-        text_sentiment, tone_sentiment = get_sentiment(text_sentiment_scores, tone_sentiment_scores)
-        st.subheader("Summary")
-        typing_placeholder = st.empty()
-        display_sentiment_summary(text_sentiment, tone_sentiment, typing_placeholder)
+
+def analyze_tone_sentiment(audio):
+    tone_sentiment_scores = tonal_sentiment_analysis(audio)
+    st.subheader("Sentiment Analysis on Tone:")
+    display_sentiment_scores(tone_sentiment_scores)
+    return tone_sentiment_scores
+
+
+def display_summary(transcription, text_sentiment_scores, tone_sentiment_scores):
+    text_sentiment, tone_sentiment = get_sentiment(text_sentiment_scores, tone_sentiment_scores)
+    st.subheader("Summary")
+    typing_placeholder = st.empty()
+    display_sentiment_summary(text_sentiment, tone_sentiment, typing_placeholder)
 
 if __name__ == "__main__":
     main()
