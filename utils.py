@@ -4,7 +4,6 @@ import time
 import librosa
 import numpy as np
 import pandas as pd
-import sounddevice as sd
 import streamlit as st
 import torch
 from pydub import AudioSegment
@@ -103,48 +102,6 @@ def textual_sentiment_analysis(text):
     id_to_score = dict(zip(ids, map(lambda x: round(float(x), 4), scores)))
 
     return id_to_score
-
-
-def record_audio(duration=5, sample_rate=16000):
-    """
-    Records audio from the default microphone for a specified duration and sample rate.
-
-    Parameters:
-    duration (int, optional): The length of the recording in seconds. Default is 5 seconds.
-    sample_rate (int, optional): The sample rate for the recording in Hertz. Default is 16000 Hz.
-
-    Returns:
-    numpy.ndarray: A 1D numpy array containing the recorded audio data.
-    None: If an error occurs during recording.
-
-    Raises:
-    Exception: If an error occurs during the recording process, it will be caught and printed.
-    """
-    try:
-        print("Recording... Speak now!")
-        audio = sd.rec(int(duration * sample_rate), samplerate=sample_rate, channels=1, dtype='float32')
-        sd.wait()  # Wait until recording is finished
-        print("Recording complete.")
-        return np.squeeze(audio)
-    except Exception as e:
-        print("Error recording audio:", e)
-        return None
-    
-
-def normalize_audio(audio):
-    """
-    Normalize the audio signal to have values between -1 and 1.
-
-    Parameters:
-    audio (numpy.ndarray): The input audio signal as a numpy array.
-
-    Returns:
-    numpy.ndarray: The normalized audio signal. If the input audio is None or 
-                   has no non-zero values, the original audio is returned.
-    """
-    if audio is not None and np.max(np.abs(audio)) > 0:
-        audio = audio / np.max(np.abs(audio))
-    return audio
 
 
 def check_video_format(video_file):

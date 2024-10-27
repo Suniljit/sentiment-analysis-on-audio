@@ -11,8 +11,6 @@ from utils import (
     extract_audio_from_video,
     get_sentiment,
     load_audio,
-    normalize_audio,
-    record_audio,
     speech_to_text,
     textual_sentiment_analysis,
     tonal_sentiment_analysis,
