@@ -33,7 +33,7 @@ The models used in this project are:
 * Speech to Tone and Tonal Sentiment Analysis: [Wav2Vec2 for Emotion Recognition](https://huggingface.co/superb/wav2vec2-base-superb-er)
 
 ## Results
-In the example below, we fed an audio clip of Ice Cube saying some nice things but in an angry voice. While the Wav2Vec2 model was not able to detect the words he said well (the words said was "I want a love like the love in the notebook, a love that splits the sky"), it detected the key word "love" multiple times, allowing the sentiment model to classifiy the sentiment as positive. <br>
+In the example below, we fed an audio clip of Ice Cube saying some nice things but in an angry voice. While the Wav2Vec2 model was not able to detect the words he said well (the words said was "I want a love like the love in the notebook, a love that splits the sky". By  feeding these words directly to the sentiment analysis model, we achieve a positive score of 0.633), it detected the key word "love" multiple times, allowing the sentiment model to classifiy the sentiment as positive. <br>
 
 However, the Wav2Vec2 model was able to detect his tone an angry rather clearly. 
 
