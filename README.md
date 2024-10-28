@@ -30,10 +30,10 @@ You can input either audio or video files for sentiment analysis.
 The models used in this project are:
 * Speech to Text: [Wav2Vec2](https://huggingface.co/facebook/wav2vec2-base-960h)
 * Textual Sentiment Analysis: [Twitter roBERTa for Sentiment Analysis](https://huggingface.co/cardiffnlp/twitter-roberta-base-sentiment-latest)
-* Tonal Sentiment Analysis: [Wav2Vec2 for Emotion Recognition](https://huggingface.co/superb/wav2vec2-base-superb-er)
+* Speech to Tone and Tonal Sentiment Analysis: [Wav2Vec2 for Emotion Recognition](https://huggingface.co/superb/wav2vec2-base-superb-er)
 
 ## Results
-In the example below, we fed an audio clip of Ice Cube saying some nice things but in an angry voice. While the Wav2Vec2 model was not able to detect the words he said well, it detected the key word "love" multiple times, allowing the sentiment model to classifiy the sentiment as positive. <br>
+In the example below, we fed an audio clip of Ice Cube saying some nice things but in an angry voice. While the Wav2Vec2 model was not able to detect the words he said well (the words said was "I want a love like the love in the notebook, a love that splits the sky"), it detected the key word "love" multiple times, allowing the sentiment model to classifiy the sentiment as positive. <br>
 
 However, the Wav2Vec2 model was able to detect his tone an angry rather clearly. 
 
